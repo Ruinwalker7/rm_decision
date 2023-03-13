@@ -2,7 +2,8 @@
      <BehaviorTree ID="MainTree">
         <Sequence name="root">
             <checkMode checkmode="1"/>
-            <checkMode checkmode="2"/>
+            <movebase goal="1;2;1"/>
         </Sequence>
+
      </BehaviorTree>
  </root>

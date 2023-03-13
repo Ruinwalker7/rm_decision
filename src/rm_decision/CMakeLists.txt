@@ -8,6 +8,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   roslib
+  actionlib
+  actionlib_msgs
 )
 
 # find_package(behaviortree_cpp)

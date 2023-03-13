@@ -5,39 +5,12 @@
 #include <ros/ros.h>
 #include <std_msgs/Int32.h>
 
-
-struct Position2D{
-    double x, y;
-};
-
-namespace BT
-{
-template <>
-inline Position2D convertFromString(StringView str)
-{
-  printf("Converting string: \"%s\"\n", str.data());
-  // real numbers separated by semicolons
-  auto parts = splitString(str, ';');
-  if (parts.size() != 2)
-  {
-    throw RuntimeError("invalid input)");
-  }
-  else
-  {
-    Position2D output;
-    output.x = convertFromString<double>(parts[0]);
-    output.y = convertFromString<double>(parts[1]);
-    return output;
-  }
-}
-}
-
-
 namespace Decision{
 
-//手动维护黑板
+//手动维护一个黑板
 static int mode_now=1;
 
+//检测是否到想要的模式（开始、结束）
 class checkMode: public BT::SyncActionNode{
 public:
     checkMode(const std::string& name, const BT::NodeConfig& config) :
@@ -63,8 +36,6 @@ public:
         return BT::NodeStatus::FAILURE;
   };
 };
-
-
 
 class DecisionNode{
 public:
