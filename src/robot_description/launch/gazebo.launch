@@ -1,0 +1,18 @@
+<launch>
+  <!-- 颜色ID参数 -->
+  <arg name="id" default="1"/>
+  <arg name="color" default="blue"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+  <include file="$(find robot_description_rm20)/launch/spawn.launch">
+    <arg name="color" value="$(arg color)" />
+    <arg name="id" value="$(arg id)" />
+    <arg name="x" value="0" />
+    <arg name="y" value="0" />
+    <arg name="z" value="0" />
+    <arg name="R" value="0" />
+    <arg name="P" value="0" />
+    <arg name="Y" value="0" />
+  </include>
+
+
+</launch>

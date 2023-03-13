@@ -9,7 +9,7 @@
 namespace Decision{
 
 //手动维护一个黑板
-static int mode_now=0;
+static int mode_now=1;
 static int time = 240;
 //检测是否到想要的模式（开始、结束）
 class checkMode: public BT::SyncActionNode{

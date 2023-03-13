@@ -1,0 +1,4 @@
+<launch>
+    <arg name="id" default="1"/>
+    <arg name="color" default="blue"/>
+</launch>

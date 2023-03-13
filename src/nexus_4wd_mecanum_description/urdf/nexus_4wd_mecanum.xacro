@@ -1,0 +1,436 @@
+<?xml version="1.0"?>
+<robot name="nexus_4wd_mecanum" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="PI" value="3.1415926535897931" />
+
+  <xacro:property name="wheel_radius" value="0.050" />
+  <xacro:property name="wheel_width" value="0.0505" />
+
+  <material name="yellow"><color rgba="0.8 0.8 0.0 1.0" /></material>
+  <material name="black"><color rgba="0.15 0.15 0.15 1.0" /></material>
+  <material name="dark_grey"><color rgba="0.2 0.2 0.2 1.0" /></material>
+  <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>
+
+  <link name="base_footprint"></link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0 0 0.05" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.1" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/nexus_base_link.STL" scale="0.001 0.001 0.002"/>
+      </geometry>
+      <material name="black" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/nexus_base_link_collision.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <!-- Inertia from CAD model, filled box assumption -->
+      <origin xyz="-0.01103 0 0.002" rpy="0 0 0"/>
+      <mass value="2.844"/>
+      <inertia
+        ixx="0.018819942" ixy="0" ixz="-0.000101519"
+        iyy="0.057333716" iyz="0"
+        izz="0.074201740"/>
+    </inertial>
+  </link>
+
+  <joint name="upper_left_wheel_shaft_joint" type="fixed">
+    <origin xyz="0.150 0.108 0.0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="upper_left_wheel_shaft" />
+  </joint>
+
+  <link name="upper_left_wheel_shaft">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0.01221 0" rpy="0 0 0"/>
+      <mass value="0.055"/>
+      <inertia
+        ixx="0.000021370" ixy="0" ixz="0"
+        iyy="0.000009966" iyz="0"
+        izz="0.000021370"/>
+    </inertial>
+  </link>
+
+  <joint name="lower_left_wheel_shaft_joint" type="fixed">
+    <origin xyz="-0.150 0.108 0.0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="lower_left_wheel_shaft" />
+  </joint>
+
+  <link name="lower_left_wheel_shaft">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0.01221 0" rpy="0 0 0"/>
+      <mass value="0.055"/>
+      <inertia
+        ixx="0.000021370" ixy="0" ixz="0"
+        iyy="0.000009966" iyz="0"
+        izz="0.000021370"/>
+    </inertial>
+  </link>
+
+  <joint name="upper_right_wheel_shaft_joint" type="fixed">
+    <origin xyz="0.150 -0.108 0.0" rpy="${PI} 0 0" />
+    <parent link="base_link"/>
+    <child link="upper_right_wheel_shaft" />
+  </joint>
+
+  <link name="upper_right_wheel_shaft">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0.01221 0" rpy="0 0 0"/>
+      <mass value="0.055"/>
+      <inertia
+        ixx="0.000021370" ixy="0" ixz="0"
+        iyy="0.000009966" iyz="0"
+        izz="0.000021370"/>
+    </inertial>
+  </link>
+
+  <joint name="lower_right_wheel_shaft_joint" type="fixed">
+    <origin xyz="-0.150 -0.108 0.0" rpy="${PI} 0 0" />
+    <parent link="base_link"/>
+    <child link="lower_right_wheel_shaft" />
+  </joint>
+
+  <link name="lower_right_wheel_shaft">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/wheel_shaft.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0.01221 0" rpy="0 0 0"/>
+      <mass value="0.055"/>
+      <inertia
+        ixx="0.000021370" ixy="0" ixz="0"
+        iyy="0.000009966" iyz="0"
+        izz="0.000021370"/>
+    </inertial>
+  </link>
+
+  <joint name="upper_left_wheel_joint" type="continuous">
+    <origin xyz="0 0.042 0" rpy="0 0 0" />
+    <parent link="upper_left_wheel_shaft"/>
+    <child link="upper_left_wheel" />
+    <axis xyz="0 1 0"/>
+  </joint>
+  
+  <link name="upper_left_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="light_grey" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="0.3844"/>
+      <!-- Inertia based on cylinder -->
+      <inertia
+        ixx="0.000324824" ixy="0" ixz="0"
+        iyy="0.000480000" iyz="0"
+        izz="0.000324824"/>
+    </inertial>
+  </link>
+
+  <joint name="lower_left_wheel_joint" type="continuous">
+    <origin xyz="0 0.042 0" rpy="0 0 0" />
+    <parent link="lower_left_wheel_shaft"/>
+    <child link="lower_left_wheel" />
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="lower_left_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="light_grey" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="0.3844"/>
+      <!-- Inertia based on cylinder -->
+      <inertia
+        ixx="0.000324824" ixy="0" ixz="0"
+        iyy="0.000480000" iyz="0"
+        izz="0.000324824"/>
+    </inertial>
+  </link>
+
+  <joint name="upper_right_wheel_joint" type="continuous">
+    <origin xyz="0 0.042 0" rpy="0 0 0" />
+    <parent link="upper_right_wheel_shaft"/>
+    <child link="upper_right_wheel" />
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="upper_right_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_right.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="light_grey" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="0.3844"/>
+      <!-- Inertia based on cylinder -->
+      <inertia
+        ixx="0.000324824" ixy="0" ixz="0"
+        iyy="0.000480000" iyz="0"
+        izz="0.000324824"/>
+    </inertial>
+  </link>
+  
+  <joint name="lower_right_wheel_joint" type="continuous">
+    <origin xyz="0 0.042 0" rpy="0 0 0" />
+    <parent link="lower_right_wheel_shaft"/>
+    <child link="lower_right_wheel" />
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="lower_right_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/mecanum_wheel_left.STL" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="light_grey" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="0.3844"/>
+      <!-- Inertia based on cylinder -->
+      <inertia
+        ixx="0.000324824" ixy="0" ixz="0"
+        iyy="0.000480000" iyz="0"
+        izz="0.000324824"/>
+    </inertial>
+  </link>
+
+  <link name="arm">
+    <inertial>
+      <origin xyz="-0.010737 0.0095595 0.064952" rpy="0 0 0" />
+      <mass value="1.0383" />
+      <inertia ixx="0.0010489" ixy="2.1758E-05" ixz="1.0751E-05" iyy="0.0011027" iyz="-6.1634E-06" izz="0.0011775" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_description_rm20/meshes/arm.dae" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="joint_yaw" type="continuous">
+    <origin xyz="0 0 0.26" rpy="0 0 -0.011751" />
+    <parent link="base_link" />
+    <child link="arm" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.57" upper="1.57" effort="10" velocity="1" />
+  </joint>
+
+
+  <link name="gun">
+    <inertial>
+      <origin xyz="0.072039 -0.0033032 0.013427" rpy="0 0 0" />
+      <mass value="0.29314" />
+      <inertia ixx="0.00013154" ixy="-6.6334E-07" ixz="1.1593E-06" iyy="0.00020933" iyz="-1.0306E-06" izz="0.00027994" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_description_rm20/meshes/gun.dae" />
+      </geometry>
+    </visual>
+    <light name='laser_led' type='spot'>
+    </light>
+  </link>
+
+
+  <joint name="joint_pitch" type="continuous">
+    <origin xyz="0.00049304 0 0.166" rpy="0 0.0034784 0" />
+    <parent link="arm" />
+    <child link="gun" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.7" upper="0.7" effort="10" velocity="1" />
+  </joint>
+
+  <link name="camera">
+    <inertial>
+      <origin xyz="-0.0042394 0.0075832 0.0027857" rpy="0 0 0" />
+      <mass value="0.037897" />
+      <inertia ixx="4.514E-06" ixy="-5.1353E-08" ixz="1.2877E-07" iyy="5.8462E-06" iyz="-7.1995E-08" izz="5.8035E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	      <mesh filename="package://robot_description_rm20/meshes/camera.dae" />
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="camera_static" type="fixed">
+    <origin xyz="0.019493 -0.093993 0.097327" rpy="-1.5708 0 -1.5708" />
+    <parent link="arm" />
+    <child link="camera" />
+  </joint>
+
+  <link name="camera_modify">
+    <inertial>
+      <origin xyz="-0.0042394 0.0075832 0.0027857" rpy="0 0 0" />
+      <mass value="0.037897" />
+      <inertia ixx="4.514E-06" ixy="-5.1353E-08" ixz="1.2877E-07" iyy="5.8462E-06" iyz="-7.1995E-08" izz="5.8035E-06" />
+    </inertial>
+  </link>
+
+  <joint name="camera_offset" type="fixed">
+    <origin xyz="0.029493 -0.093993 0.097327" rpy=" 0 0 0" />
+    <parent link="arm" />
+    <child link="camera_modify" />
+  </joint>
+
+  <link name="laser">
+    <inertial>
+      <origin xyz="-0.00025516 -5.4248E-06 -0.012266" rpy="0 0 0" />
+      <mass value="0.33093" />
+      <inertia ixx="0.00051138" ixy="-3.5116E-08" ixz="1.1786E-06" iyy="0.00026372" iyz="-6.838E-08" izz="0.00044058" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_description_rm20/meshes/laser.dae" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="laser_static" type="fixed">
+    <origin xyz="0.144 0 0.2475" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="laser" />
+    <axis xyz="0 0 0" />
+  </joint>
+
+  <!-- IMU -->
+  <joint name="IMU_joint " type="fixed">
+    <parent link="camera_modify"/>
+    <child link="imu_link"/>
+    <origin xyz="0 -0.07 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="imu_link">
+  </link>
+
+  <transmission name="trans_yaw">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_yaw">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_yaw">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_pitch">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_pitch">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_pitch">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <!-- Include controller plugin for Gazebo -->
+  <xacro:include filename="$(find nexus_4wd_mecanum_description)/urdf/nexus_4wd_mecanum.gazebo" />
+
+</robot>

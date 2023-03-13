@@ -68,6 +68,11 @@ class MoveBaseAction : public BT::StatefulActionNode
 BT::NodeStatus MoveBaseAction::onStart()
 {
     ac = new MoveBaseClient("move_base", true);
+
+    while(!ac->waitForServer(ros::Duration(5.0))){
+        ROS_INFO("Waiting for the move_base action server to come up");
+    }
+
     if ( !getInput<Pose2D>("goal", _goal))
     {
     throw BT::RuntimeError("missing required input [goal]");
@@ -81,10 +86,10 @@ BT::NodeStatus MoveBaseAction::onStart()
     goal.target_pose.pose.position.y = _goal.y;
     goal.target_pose.pose.orientation.w = _goal.theta;
 
-    // ac->sendGoal(goal);
-
+    ac->sendGoal(goal);
     return BT::NodeStatus::RUNNING;
 }
+
 
 BT::NodeStatus MoveBaseAction::onRunning()
 {

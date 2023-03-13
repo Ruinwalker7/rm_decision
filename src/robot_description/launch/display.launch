@@ -1,0 +1,17 @@
+<launch>
+  <!-- 颜色ID参数 -->
+  <arg name="id" default="1"/>
+  <arg name="color" default="red"/>
+
+  <group ns="$(arg color)_$(arg id)">
+    <arg name="model" />
+    <param name="tf_prefix" value="$(arg color)_$(arg id)"/>
+    <param name="robot_description" command="xacro '$(find robot_description_rm20)/urdf/robot_description_rm20.xacro' color:=$(arg color) id:=$(arg id) visual_laser:=false"/>
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="tf_check" pkg="rqt_tf_tree" type="rqt_tf_tree" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot_description_rm20)/config/red_1.rviz" />
+
+  </group>
+
+</launch>

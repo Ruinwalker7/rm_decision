@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<!-- <xacro:arg name="color" default="red" />
+ <xacro:arg name="id" default="1" /> -->
+
+<robot name="rm_$(arg color)_$(arg id)"
+  xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.14159265" />
+
+  <!-- <arg name="gpu" default="" /> -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.021362 -2.3755E-05 0.13994" rpy="0 0 0" />
+      <mass value="12.0677" />
+      <inertia ixx="1.924e-1" ixy="-6.458e-4" ixz="5.951352e-3" iyy="2.473e-1" iyz="-7.22e-4" izz="3.187e-1"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_description_rm20/meshes/base_link_$(arg color)_$(arg id).dae" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.65 0.5 0.2"/>
+      </geometry>
+      <origin xyz="0 0 0.1" rpy="0 0 0" />
+    </collision>
+  </link>
+
+  <link name="arm">
+    <inertial>
+      <origin xyz="-0.010737 0.0095595 0.064952" rpy="0 0 0" />
+      <mass value="1.0383" />
+      <inertia ixx="0.0010489" ixy="2.1758E-05" ixz="1.0751E-05" iyy="0.0011027" iyz="-6.1634E-06" izz="0.0011775" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_description_rm20/meshes/arm.dae" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="joint_yaw" type="fixed">
+    <origin xyz="0 0 0.26" rpy="0 0 -0.011751" />
+    <parent link="base_link" />
+    <child link="arm" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.57" upper="1.57" effort="10" velocity="1" />
+  </joint>
+
+
+  <link name="gun">
+    <inertial>
+      <origin xyz="0.072039 -0.0033032 0.013427" rpy="0 0 0" />
+      <mass value="0.29314" />
+      <inertia ixx="0.00013154" ixy="-6.6334E-07" ixz="1.1593E-06" iyy="0.00020933" iyz="-1.0306E-06" izz="0.00027994" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_description_rm20/meshes/gun.dae" />
+      </geometry>
+    </visual>
+    <light name='laser_led' type='spot'>
+    </light>
+  </link>
+
+
+  <joint name="joint_pitch" type="fixed">
+    <origin xyz="0.00049304 0 0.166" rpy="0 0.0034784 0" />
+    <parent link="arm" />
+    <child link="gun" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.7" upper="0.7" effort="10" velocity="1" />
+  </joint>
+
+  <link name="camera">
+
+    <inertial>
+      <origin xyz="-0.0042394 0.0075832 0.0027857" rpy="0 0 0" />
+      <mass value="0.037897" />
+      <inertia ixx="4.514E-06" ixy="-5.1353E-08" ixz="1.2877E-07" iyy="5.8462E-06" iyz="-7.1995E-08" izz="5.8035E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.1" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_description_rm20/meshes/camera.dae" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="camera_static" type="fixed">
+    <origin xyz="0.019493 -0.093993 0.097327" rpy="-1.5708 0 -1.5708" />
+    <parent link="arm" />
+    <child link="camera" />
+  </joint>
+
+  <link name="camera_modify">
+    <inertial>
+      <origin xyz="-0.0042394 0.0075832 0.0027857" rpy="0 0 0" />
+      <mass value="0.037897" />
+      <inertia ixx="4.514E-06" ixy="-5.1353E-08" ixz="1.2877E-07" iyy="5.8462E-06" iyz="-7.1995E-08" izz="5.8035E-06" />
+    </inertial>
+  </link>
+
+  <joint name="camera_offset" type="fixed">
+    <origin xyz="0.019493 -0.093993 0.097327" rpy=" 0 0 0" />
+    <parent link="arm" />
+    <child link="camera_modify" />
+  </joint>
+
+  <link name="laser">
+    <inertial>
+      <origin xyz="-0.00025516 -5.4248E-06 -0.012266" rpy="0 0 0" />
+      <mass value="0.33093" />
+      <inertia ixx="0.00051138" ixy="-3.5116E-08" ixz="1.1786E-06" iyy="0.00026372" iyz="-6.838E-08" izz="0.00044058" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_description_rm20/meshes/laser.dae" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="laser_static" type="fixed">
+    <origin xyz="0.144 0 0.2475" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="laser" />
+    <axis xyz="0 0 0" />
+  </joint>
+
+
+
+
+<gazebo reference="gun">
+  <light name='gun/laser_led' type='spot'>
+          <pose>0 0 0 0 -1.5707963267949 0</pose>
+          <direction>0 0 -1</direction>
+          <attenuation>
+            <range>10</range>
+          </attenuation>
+          <spot>
+            <inner_angle>0.0</inner_angle>
+            <outer_angle>0.03</outer_angle>
+            <falloff>0.01</falloff>
+          </spot>
+          <diffuse>1 0.4 0.4 1</diffuse>
+          <specular>1 0 0 1</specular>
+  </light>
+  <plugin name='light_control' filename='libFlashLightPlugin.so'>
+      <enable>true</enable>
+      <light>
+        <id>gun/laser_led</id>
+        <duration>1</duration>
+        <interval>1</interval>
+      </light>
+   </plugin>
+  <selfCollide>false</selfCollide>
+</gazebo>
+
+  <transmission name="trans_yaw">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_yaw">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_yaw">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_pitch">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_pitch">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_pitch">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>

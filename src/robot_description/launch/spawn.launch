@@ -1,0 +1,21 @@
+<launch>
+    <!-- 颜色ID参数 -->
+    <arg name="id" default="1"/>
+    <arg name="color" default="blue"/>
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0"/>
+    <arg name="R" default="0"/>
+    <arg name="P" default="0"/>
+    <arg name="Y" default="0"/>
+    <arg name="visual_laser" default="true"/>
+    <group ns="$(arg color)_$(arg id)">
+        <param name="tf_prefix" value="$(arg color)_$(arg id)"/>
+        <rosparam file="$(find robot_description_rm20)/config/robot_joint_controller.yaml" command="load"/>
+
+        <!-- Convert xacro and put on parameter server -->
+        <param name="robot_description" command="xacro '$(find robot_description_rm20)/urdf/robot_description_rm20.xacro' color:=$(arg color) id:=$(arg id) visual_laser:=$(arg visual_laser)" />
+        <node name="tf_footprint_base" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0 0 0 0 $(arg color)_$(arg id)/base_link $(arg color)_$(arg id)/base_footprint " />
+        <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model rm_$(arg color)_$(arg id) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y) " output="screen" />
+    </group>
+</launch>

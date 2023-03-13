@@ -1,0 +1,27 @@
+--- # Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+# Position Controllers ---------------------------------------
+pitch_position_controller:
+  type: position_controllers/JointPositionController
+  joint: joint_pitch
+  pid: { p: 10.0, i: 0.01, d: 1.0 }
+
+# Position Controllers ---------------------------------------
+yaw_position_controller:
+  type: position_controllers/JointPositionController
+  joint: joint_yaw
+  pid: { p: 10.0, i: 0.01, d: 1.0 }
+
+gazebo_ros_control:
+  pid_gains:
+    joint_yaw:
+      p: 10.0
+      i: 0.01
+      d: 1.0
+    joint_pitch:
+      p: 10.0
+      i: 0.01
+      d: 1.0
