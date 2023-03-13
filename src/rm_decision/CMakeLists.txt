@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  roslib
 )
 
 # find_package(behaviortree_cpp)

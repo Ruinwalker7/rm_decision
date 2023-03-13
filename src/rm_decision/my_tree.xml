@@ -1,0 +1,8 @@
+ <root BTCPP_format="4" >
+     <BehaviorTree ID="MainTree">
+        <Sequence name="root">
+            <checkMode checkmode="1"/>
+            <checkMode checkmode="2"/>
+        </Sequence>
+     </BehaviorTree>
+ </root>

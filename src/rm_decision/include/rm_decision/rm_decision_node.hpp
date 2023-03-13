@@ -5,10 +5,38 @@
 #include <ros/ros.h>
 #include <std_msgs/Int32.h>
 
-namespace Decision{
-//类似黑板
-static int mode_now=1;
 
+struct Position2D{
+    double x, y;
+};
+
+namespace BT
+{
+template <>
+inline Position2D convertFromString(StringView str)
+{
+  printf("Converting string: \"%s\"\n", str.data());
+  // real numbers separated by semicolons
+  auto parts = splitString(str, ';');
+  if (parts.size() != 2)
+  {
+    throw RuntimeError("invalid input)");
+  }
+  else
+  {
+    Position2D output;
+    output.x = convertFromString<double>(parts[0]);
+    output.y = convertFromString<double>(parts[1]);
+    return output;
+  }
+}
+}
+
+
+namespace Decision{
+
+//手动维护黑板
+static int mode_now=1;
 
 class checkMode: public BT::SyncActionNode{
 public:
@@ -37,6 +65,7 @@ public:
 };
 
 
+
 class DecisionNode{
 public:
     DecisionNode();
@@ -50,4 +79,5 @@ private:
 };
 
 }
+
 #endif //RM_DECISION__RM_DECISION_NODE_HPP_
