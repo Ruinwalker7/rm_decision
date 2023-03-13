@@ -10,7 +10,7 @@ namespace Decision{
 
 //手动维护一个黑板
 static int mode_now=0;
-
+static int time = 240;
 //检测是否到想要的模式（开始、结束）
 class checkMode: public BT::SyncActionNode{
 public:
@@ -37,7 +37,21 @@ public:
   };
 };
 
+class checkTime: public BT::SyncActionNode{
+public:
+    checkTime(const std::string& name, const BT::NodeConfig& config) :
+    SyncActionNode(name, config)
+  {}
 
+  BT::NodeStatus tick() override
+  {
+      if(time<240)
+      {
+        return BT::NodeStatus::SUCCESS;
+      }
+        return BT::NodeStatus::FAILURE;
+  };
+};
 
 class DecisionNode{
 public:

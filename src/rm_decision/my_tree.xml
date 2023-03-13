@@ -5,19 +5,19 @@
             <ReactiveSequence>
                 <ReactiveFallback>
                     <movebase goal="1;2;1"/>
+                    <!-- <Action ID="partrol"> -->
                     <ReactiveSequence>
                         <cheakTime>
                         <movebase goal="0;0;0"/>
+                        <!-- <Action ID="partrol"> -->
                     </ReactiveSequence>
                 </ReactiveFallback>
 
                 <Sequence>
                     <movebase goal="4;-4;1"/>
-                    <Action ID="partrol">
+                    <!-- <Action ID="partrol"> -->
                 </Sequence>
-
             </ReactiveSequence>
         </Sequence>
-
      </BehaviorTree>
  </root>
