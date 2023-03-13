@@ -2,7 +2,21 @@
      <BehaviorTree ID="MainTree">
         <Sequence name="root">
             <checkMode checkmode="1"/>
-            <movebase goal="1;2;1"/>
+            <ReactiveSequence>
+                <ReactiveFallback>
+                    <movebase goal="1;2;1"/>
+                    <ReactiveSequence>
+                        <cheakTime>
+                        <movebase goal="0;0;0"/>
+                    </ReactiveSequence>
+                </ReactiveFallback>
+
+                <Sequence>
+                    <movebase goal="4;-4;1"/>
+                    <Action ID="partrol">
+                </Sequence>
+
+            </ReactiveSequence>
         </Sequence>
 
      </BehaviorTree>

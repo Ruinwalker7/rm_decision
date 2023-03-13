@@ -4,11 +4,12 @@
 #include "behaviortree_cpp/bt_factory.h"
 #include <ros/ros.h>
 #include <std_msgs/Int32.h>
+#include "rm_decision/SerialReceiveMsg.h"
 
 namespace Decision{
 
 //手动维护一个黑板
-static int mode_now=1;
+static int mode_now=0;
 
 //检测是否到想要的模式（开始、结束）
 class checkMode: public BT::SyncActionNode{
@@ -23,7 +24,6 @@ public:
         BT::InputPort<int>("checkmode")
         };
   }
-
   BT::NodeStatus tick() override
   {
       auto res = getInput<int>("checkmode");
@@ -37,16 +37,17 @@ public:
   };
 };
 
+
+
 class DecisionNode{
 public:
     DecisionNode();
     BT::BehaviorTreeFactory factory;
     BT::Tree tree;
 private:
-    // void callback(const std_msgs::Int32 &msg);
+    void callback(const rm_decision::SerialReceiveMsgConstPtr &msg);
     ros::NodeHandle nh_;
     ros::Subscriber serial_sub;
-    int mode;
 };
 
 }

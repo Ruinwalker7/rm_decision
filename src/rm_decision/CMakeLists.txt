@@ -9,17 +9,34 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   roslib
   actionlib
+  message_generation
+  geometry_msgs
   actionlib_msgs
+  # rm_decision
 )
 
 # find_package(behaviortree_cpp)
 find_package(behaviortree_cpp)
+
+add_message_files(
+  FILES
+  SerialReceiveMsg.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+
+
 catkin_package(
   INCLUDE_DIRS include
- LIBRARIES rm_decision
+  LIBRARIES rm_decision
 #  CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
 )
+
+
 
 include_directories(
   include
