@@ -4,9 +4,12 @@
 int main(int argc, char** argv) {
   // create ros2 node
   ros::init(argc, argv, "robot_base");
-  // serial::RobotBaseNode node;
+  Decision::DecisionNode node;
+  
   while (ros::ok()) {
+    node.tree.tickWhileRunning();
     ros::spinOnce();
+    sleep(1);
   };
 
   return 0;
