@@ -17,15 +17,6 @@ find_package(catkin REQUIRED COMPONENTS
 # find_package(behaviortree_cpp)
 find_package(behaviortree_cpp)
 
-# add_message_files(
-#   FILES
-#   SerialReceiveMsg.msg
-# )
-
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
 
 
 catkin_package(
@@ -49,5 +40,5 @@ set(SRC
 add_executable(${PROJECT_NAME}_node ${SRC})
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_node 
-${catkin_LIBRARIES}
-BT::behaviortree_cpp)
+  ${catkin_LIBRARIES}
+  BT::behaviortree_cpp)
