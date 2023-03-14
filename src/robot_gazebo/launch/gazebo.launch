@@ -1,26 +1,28 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="world_name" default="2023_v_4_1" />
+
+  
   <arg name="gui" default="true" />
   <arg name="run_camera" default="false"/>
 
-  <arg name="x_pos" default="7"/>
-  <arg name="y_pos" default="4"/>
+  <arg name="x_pos" default="3"/>
+  <arg name="y_pos" default="1"/>
   <arg name="z_pos" default="1"/>
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
-  
-  <node
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find robot_gazebo)/worlds/2023_v_4_1.world" />
+    </include>
+  <!-- <node
     name="map_spawn_model"
     pkg="gazebo_ros"
     type="spawn_model"
     args="-file $(find rmus_map_2)/urdf/rmus_map_2.urdf -urdf -model rmus_map_2"
-    output="screen" />
+    output="screen" /> -->
 
   <include file="$(find robot_description_rm20)/launch/spawn.launch">
     <arg name="color" value="red" />
     <arg name="id" value="1" />
-    <arg name="x" value="5" />
+    <arg name="x" value="-3" />
     <arg name="y" value="2" />
     <arg name="z" value="0.2" />
     <arg name="R" value="0" />
@@ -36,7 +38,7 @@
   <!-- Load robot description -->
         <include file="$(find nexus_4wd_mecanum_description)/launch/nexus_4wd_mecanum_description.launch" />
   <!-- Spawn the robot -->
-       <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -model nexus_4wd_mecanum -param robot_description -x 7.5 -y 6 -z 1" />
+       <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -model nexus_4wd_mecanum -param robot_description -x 3 -y 1 -z 1" />
         
   <node name="controller" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" ns="/" args="spawn
             joint_state_controller
