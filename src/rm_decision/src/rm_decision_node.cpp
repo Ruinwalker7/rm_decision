@@ -8,7 +8,7 @@
 namespace Decision{
 void DecisionNode::callback(const rm_interfaces::SerialReceiveMsgConstPtr &msg){
     mode_now = msg->mode;
-    brood = msg->brood;
+    brood = msg->blood;
 }
 
 DecisionNode::DecisionNode():nh_(){

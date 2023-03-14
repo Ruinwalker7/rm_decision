@@ -66,21 +66,6 @@ public:
   };
 };
 
-class checkTime: public BT::SyncActionNode{
-public:
-    checkTime(const std::string& name, const BT::NodeConfig& config) :
-    SyncActionNode(name, config)
-  {}
-
-  BT::NodeStatus tick() override
-  {
-      if(time<240)
-      {
-        return BT::NodeStatus::SUCCESS;
-      }
-        return BT::NodeStatus::FAILURE;
-  };
-};
 
 class DecisionNode{
 public:
