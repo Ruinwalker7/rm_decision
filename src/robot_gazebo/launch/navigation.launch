@@ -4,7 +4,7 @@
   <include file="$(find robot_gazebo)/launch/gazebo.launch"/>
   <node name="tf_map" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0 0 0 0 odom map " />
   <!-- Launch the built-map -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find robot_gazebo)/map/rm_map.yaml" />
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find robot_gazebo)/map/map.yaml" />
   
   <!--Launch the move base with time elastic band-->
   <param name="/use_sim_time" value="true"/>
