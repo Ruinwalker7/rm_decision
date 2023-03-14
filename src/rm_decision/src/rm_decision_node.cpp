@@ -6,13 +6,13 @@
 
 
 namespace Decision{
-void DecisionNode::callback(const rm_decision::SerialReceiveMsgConstPtr &msg){
+void DecisionNode::callback(const rm_interfaces::SerialReceiveMsgConstPtr &msg){
     mode_now = msg->mode;
 }
 
 DecisionNode::DecisionNode():nh_(){
 
-    serial_sub=nh_.subscribe<rm_decision::SerialReceiveMsg>(
+    serial_sub=nh_.subscribe<rm_interfaces::SerialReceiveMsg>(
         "/serial_receive",100,&DecisionNode::callback, this);
     
     std::string model_path = ros::package::getPath("rm_decision") + "/my_tree.xml";

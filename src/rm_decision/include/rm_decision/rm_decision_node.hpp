@@ -4,7 +4,7 @@
 #include "behaviortree_cpp/bt_factory.h"
 #include <ros/ros.h>
 #include <std_msgs/Int32.h>
-#include "rm_decision/SerialReceiveMsg.h"
+#include "rm_interfaces/SerialReceiveMsg.h"
 
 namespace Decision{
 
@@ -59,7 +59,7 @@ public:
     BT::BehaviorTreeFactory factory;
     BT::Tree tree;
 private:
-    void callback(const rm_decision::SerialReceiveMsgConstPtr &msg);
+    void callback(const rm_interfaces::SerialReceiveMsgConstPtr &msg);
     ros::NodeHandle nh_;
     ros::Subscriber serial_sub;
 };
