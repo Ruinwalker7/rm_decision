@@ -4,7 +4,7 @@
             <checkMode checkmode="1"/>
             <ReactiveSequence>
                 <ReactiveFallback>
-                    <movebase goal="1;2;1"/>
+                    <movebase goal="1;1;1"/>
                     <!-- <Action ID="partrol">
                     <ReactiveSequence>
                         <cheakTime>
