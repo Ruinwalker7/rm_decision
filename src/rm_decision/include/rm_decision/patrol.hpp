@@ -4,9 +4,10 @@
 #include "behaviortree_cpp/behavior_tree.h"
 #include <move_base_msgs/MoveBaseAction.h>   // 引用move_base的信息
 #include <actionlib/client/simple_action_client.h>   // 引用actionlib库
+#include <ros/ros.h>
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
-
+MoveBaseClient *ac=nullptr;
 struct PatrolRange
 {
     double x, y, x_,y_;
@@ -60,16 +61,32 @@ class PatrolAction : public BT::StatefulActionNode
     // callback to execute if the action was aborted by another node
     void onHalted() override;
 
+    void patrol();
   private:
     PatrolRange _goal;
     move_base_msgs::MoveBaseGoal goal;
-    MoveBaseClient *ac;
+
 };
 
-BT::NodeStatus PatrolAction::onStart()
-{
-    ac = new MoveBaseClient("move_base", true);
+void PatrolAction::patrol(){
+    goal.target_pose.header.frame_id = "map";
+    goal.target_pose.header.stamp = ros::Time::now();
+    goal.target_pose.pose.orientation.w = 1;
+    _goal.x_=-_goal.x_;
+    _goal.y_=-_goal.y_;
+    goal.target_pose.pose.position.x=_goal.x+_goal.x_;
+    goal.target_pose.pose.position.y=_goal.y+_goal.y_;
+    printf("[ Patrol: SEND GOAL ]. goal: x=%.1f y=%.1f \n",
+    goal.target_pose.pose.position.x, goal.target_pose.pose.position.y);
+    ac->sendGoal(goal);
+}
 
+BT::NodeStatus PatrolAction::onStart()
+{   if(ac==nullptr)
+        ac = new MoveBaseClient("move_base", true);
+    if(ac->getState()==actionlib::SimpleClientGoalState::ACTIVE)
+        return BT::NodeStatus::RUNNING;
+    
     while(!ac->waitForServer(ros::Duration(5.0))){
         ROS_INFO("Waiting for the move_base action server to come up");
     }
@@ -78,36 +95,36 @@ BT::NodeStatus PatrolAction::onStart()
     {
     throw BT::RuntimeError("missing required input [goal]");
     }
-    printf("[ MoveBase: SEND GOAL ]. goal: x=%.1f y=%.1f \n",
-         _goal.x, _goal.y);
 
-    goal.target_pose.header.frame_id = "map";
-    goal.target_pose.header.stamp = ros::Time::now();
-    goal.target_pose.pose.position.x = _goal.x+_goal.x_;
-    goal.target_pose.pose.position.y = _goal.y+_goal.y_;
-    goal.target_pose.pose.orientation.w = 1;
 
-    ac->sendGoal(goal);
+    // goal.target_pose.header.frame_id = "map";
+    // goal.target_pose.header.stamp = ros::Time::now();
+    // goal.target_pose.pose.position.x = _goal.x+_goal.x_;
+    // goal.target_pose.pose.position.y = _goal.y+_goal.y_;
+    // goal.target_pose.pose.orientation.w = 1;
+    // printf("[ Patrol: SEND GOAL ]. goal: x=%.1f y=%.1f \n",
+    // goal.target_pose.pose.position.x, goal.target_pose.pose.position.y);
+    // ac->sendGoal(goal);
+    patrol();
+    ros::spinOnce();
     return BT::NodeStatus::RUNNING;
 }
 
 
 BT::NodeStatus PatrolAction::onRunning()
 {
-
+    ros::spinOnce();
+    sleep(1);
     if(ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
     {
-    //     _goal.x_=-_goal.x;
-    //     _goal.y_=-_goal.y;
-    // goal.target_pose.pose.position.x=_goal.x+_goal.x_;
-    // goal.target_pose.pose.position.y=_goal.y+_goal.y_;
-    // ac->sendGoal(goal);
-    return BT::NodeStatus::SUCCESS;
-  }
+        patrol();
+        ros::spinOnce();
+        return BT::NodeStatus::SUCCESS;
+    }
     else if(ac->getState() == actionlib::SimpleClientGoalState::ABORTED)
         return BT::NodeStatus::FAILURE;
 
-    sleep(1);
+
     std::cout<<"GOAL RUNNING"<<std::endl<<std::endl;
     return BT::NodeStatus::RUNNING;
 };
