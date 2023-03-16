@@ -1,5 +1,5 @@
-#ifndef MOVEBASE_BT_NODES_H
-#define MOVEBASE_BT_NODES_H
+#ifndef PATROL_HPP
+#define PATROL_HPP
 
 #include "behaviortree_cpp/behavior_tree.h"
 #include <move_base_msgs/MoveBaseAction.h>   // 引用move_base的信息
@@ -7,38 +7,39 @@
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
-struct Pose2D
+struct PatrolRange
 {
-    double x, y, theta;
+    double x, y, x_,y_;
 };
 
 namespace BT
 {
 template <> inline
-Pose2D convertFromString(StringView key)
+PatrolRange convertFromString(StringView key)
 {
     auto parts = BT::splitString(key, ';');
-    if (parts.size() != 3)
+    if (parts.size() != 4)
     {
         throw BT::RuntimeError("invalid input)");
     }
     else
     {
-        Pose2D output;
+        PatrolRange output;
         output.x     = convertFromString<double>(parts[0]);
         output.y     = convertFromString<double>(parts[1]);
-        output.theta = convertFromString<double>(parts[2]);
+        output.x_  =  convertFromString<double>(parts[2]);
+        output.y_     = convertFromString<double>(parts[3]);
         return output;
     }
 }
 } // end namespace BT
 
 
-class MoveBaseAction : public BT::StatefulActionNode
+class PatrolAction : public BT::StatefulActionNode
 {
   public:
     // Any TreeNode with ports must have a constructor with this signature
-    MoveBaseAction(const std::string& name, const BT::NodeConfig& config)
+    PatrolAction(const std::string& name, const BT::NodeConfig& config)
       : StatefulActionNode(name, config)
     {
         
@@ -46,7 +47,7 @@ class MoveBaseAction : public BT::StatefulActionNode
 
     static BT::PortsList providedPorts()
     {
-        return{ BT::InputPort<Pose2D>("goal") };
+        return{ BT::InputPort<PatrolRange>("goal") };
     }
 
     // this function is invoked once at the beginning.
@@ -60,12 +61,12 @@ class MoveBaseAction : public BT::StatefulActionNode
     void onHalted() override;
 
   private:
-    Pose2D _goal;
+    PatrolRange _goal;
     move_base_msgs::MoveBaseGoal goal;
     MoveBaseClient *ac;
 };
 
-BT::NodeStatus MoveBaseAction::onStart()
+BT::NodeStatus PatrolAction::onStart()
 {
     ac = new MoveBaseClient("move_base", true);
 
@@ -73,7 +74,7 @@ BT::NodeStatus MoveBaseAction::onStart()
         ROS_INFO("Waiting for the move_base action server to come up");
     }
 
-    if ( !getInput<Pose2D>("goal", _goal))
+    if ( !getInput<PatrolRange>("goal", _goal))
     {
     throw BT::RuntimeError("missing required input [goal]");
     }
@@ -82,21 +83,25 @@ BT::NodeStatus MoveBaseAction::onStart()
 
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
-    goal.target_pose.pose.position.x = _goal.x;
-    goal.target_pose.pose.position.y = _goal.y;
-    goal.target_pose.pose.orientation.w = _goal.theta;
+    goal.target_pose.pose.position.x = _goal.x+_goal.x_;
+    goal.target_pose.pose.position.y = _goal.y+_goal.y_;
+    goal.target_pose.pose.orientation.w = 1;
 
     ac->sendGoal(goal);
     return BT::NodeStatus::RUNNING;
 }
 
 
-BT::NodeStatus MoveBaseAction::onRunning()
+BT::NodeStatus PatrolAction::onRunning()
 {
 
     if(ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
     {
-    std::cout << "[ MoveBase: FINISHED ]" << std::endl<<std::endl;
+    //     _goal.x_=-_goal.x;
+    //     _goal.y_=-_goal.y;
+    // goal.target_pose.pose.position.x=_goal.x+_goal.x_;
+    // goal.target_pose.pose.position.y=_goal.y+_goal.y_;
+    // ac->sendGoal(goal);
     return BT::NodeStatus::SUCCESS;
   }
     else if(ac->getState() == actionlib::SimpleClientGoalState::ABORTED)
@@ -107,9 +112,9 @@ BT::NodeStatus MoveBaseAction::onRunning()
     return BT::NodeStatus::RUNNING;
 };
 
-void MoveBaseAction::onHalted()
+void PatrolAction::onHalted()
 {
     ac->cancelGoal();
     printf("[ MoveBase: ABORTED ]");
 };
-#endif   // MOVEBASE_BT_NODES_H
+#endif   // PATROL_HPP

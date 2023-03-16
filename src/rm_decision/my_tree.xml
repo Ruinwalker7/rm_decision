@@ -2,16 +2,19 @@
      <BehaviorTree ID="MainTree">
         <Sequence name="root">
             <checkMode checkmode="1"/>
-            
+
             <ReactiveSequence>
                 <ReactiveFallback>
                      <checkBlood checkblood="400"/>
+
                      <ReactiveSequence>
                         <checkTime checktime="240"/>
-                        <movebase goal="2;1;0"/>
-                        <!-- <Action ID="partrol"> -->
+                        <movebase goal="2;1;1"/>
+                        <patrol goal="2;1;1;0"/>
+                        <patrol goal="2;1;-1;0"/>
                     </ReactiveSequence>
-                    <movebase goal="2;2;0"/>
+
+                    <movebase goal="4;2.5;1"/>
                 </ReactiveFallback> 
 
                 <ReactiveSequence>
@@ -20,8 +23,9 @@
                     <!-- 原地小陀螺 -->
                     <!-- </ReactiveFallback> -->
                     <Sequence>
-                        <movebase goal="-1;-1;0"/>
-                        <!-- <Action ID="partrol"> -->
+                        <movebase goal="-1;-1;1"/>
+                        <patrol goal="-1;-1;0.5;0"/>
+                        <patrol goal="-1;-1;-1;0"/>
                     </Sequence>
                     
                 </ReactiveSequence>

@@ -26,4 +26,10 @@ rosrun rqt rqt_
 rosrun rm_decision rm_decision
 ```
 
+
+## TODO
+1. 巡逻
+2. 小陀螺
+3. 三维旋转和四元数 
+
 建设中....

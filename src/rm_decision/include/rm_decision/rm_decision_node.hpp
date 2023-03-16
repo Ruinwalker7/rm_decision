@@ -30,11 +30,12 @@ public:
       auto res = getInput<int>("checkmode");
       int mode = res.value();
       std::cout<<"检测模式是否为："<<mode<<std::endl;
+      std::cout<<"当前模式为："<<mode_now<<std::endl<<std::endl;
       if(mode_now==mode)
       {
         return BT::NodeStatus::SUCCESS;
       }
-      std::cout<<"当前模式为："<<mode_now<<std::endl;
+
         return BT::NodeStatus::FAILURE;
   };
 };
@@ -54,14 +55,15 @@ public:
   }
   BT::NodeStatus tick() override
   {
+     ros::spinOnce();
       auto res = getInput<int>("checktime");
       int checkTime = res.value();
       std::cout<<"检测剩余时间是否小于："<<checkTime<<std::endl;
+      std::cout<<"当前时间为："<<time<<std::endl<<std::endl;
       if(checkTime<time)
       {
         return BT::NodeStatus::SUCCESS;
       }
-      std::cout<<"当前时间为："<<time<<std::endl;
         return BT::NodeStatus::FAILURE;
   };
 };
@@ -81,14 +83,16 @@ public:
   }
   BT::NodeStatus tick() override
   {
+      ros::spinOnce();
       auto res = getInput<int>("checkblood");
       int checkblood = res.value();
       std::cout<<"检测血量是否大于："<<checkblood<<std::endl;
+      std::cout<<"当前血量为："<<blood<<std::endl<<std::endl;
       if(blood>checkblood)
       {
         return BT::NodeStatus::SUCCESS;
       }
-      std::cout<<"当前血量为："<<blood<<std::endl;
+   
         return BT::NodeStatus::FAILURE;
   };
 };
