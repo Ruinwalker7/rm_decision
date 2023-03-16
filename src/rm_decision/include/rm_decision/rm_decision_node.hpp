@@ -9,9 +9,9 @@
 namespace Decision{
 
 //手动维护一个黑板
-static int mode_now=1;
-static int time = 240;
-static int brood = 600;
+static int mode_now=0;
+static int time = 500;
+static int blood = 600;
 //检测是否到想要的模式（开始、结束）
 class checkMode: public BT::SyncActionNode{
 public:
@@ -65,6 +65,34 @@ public:
         return BT::NodeStatus::FAILURE;
   };
 };
+
+//检测是否大于想要的血量
+class checkBlood: public BT::SyncActionNode{
+public:
+    checkBlood(const std::string& name, const BT::NodeConfig& config) :
+    SyncActionNode(name, config)
+  {}
+
+      static BT::PortsList providedPorts()
+  {
+    return {
+        BT::InputPort<int>("checkblood")
+        };
+  }
+  BT::NodeStatus tick() override
+  {
+      auto res = getInput<int>("checkblood");
+      int checkblood = res.value();
+      std::cout<<"检测血量是否大于："<<checkblood<<std::endl;
+      if(blood>checkblood)
+      {
+        return BT::NodeStatus::SUCCESS;
+      }
+      std::cout<<"当前血量为："<<blood<<std::endl;
+        return BT::NodeStatus::FAILURE;
+  };
+};
+
 
 
 class DecisionNode{

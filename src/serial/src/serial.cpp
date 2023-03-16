@@ -7,9 +7,11 @@ typedef dynamic_reconfigure::Server<serial::SerialConfig> config_srv;
 
 static int mode = 0;
 static int brood=600;
+static int time_=420;
 void configure_cb(const serial::SerialConfig &config, uint32_t level) {
   mode = config.mode;
   brood =config.brood;
+  time_= config.time;
 }
 
 int main(int argc, char** argv) {
@@ -31,12 +33,13 @@ int main(int argc, char** argv) {
     msg.blood=brood;
     msg.mode=mode;
     msg.header.stamp=ros::Time::now();
-    msg.time = 420;
+    msg.time = time_;
     ros::Rate freqency(ros::Duration(1/100.0));
     while (ros::ok()) {
       ros::spinOnce();
       msg.blood=brood;
       msg.mode=mode;
+      msg.time = time_;
       msg.header.stamp=ros::Time::now();
       serial_pub.publish(msg);
       ros::spinOnce();

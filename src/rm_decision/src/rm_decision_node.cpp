@@ -8,7 +8,8 @@
 namespace Decision{
 void DecisionNode::callback(const rm_interfaces::SerialReceiveMsgConstPtr &msg){
     mode_now = msg->mode;
-    brood = msg->blood;
+    blood = msg->blood;
+    time = msg->time;
 }
 
 DecisionNode::DecisionNode():nh_(){
@@ -20,8 +21,8 @@ DecisionNode::DecisionNode():nh_(){
     //注册树
     factory.registerNodeType<checkMode>("checkMode");
     factory.registerNodeType<MoveBaseAction>("movebase");
-    factory.registerNodeType<checkTime>("cheakTime");
-
+    factory.registerNodeType<checkTime>("checkTime");
+    factory.registerNodeType<checkBlood>("checkBlood");
     tree = factory.createTreeFromFile(model_path);
     }
 }

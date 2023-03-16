@@ -1,23 +1,30 @@
  <root BTCPP_format="4" >
      <BehaviorTree ID="MainTree">
         <Sequence name="root">
-           
-           
+            <checkMode checkmode="1"/>
+            
             <ReactiveSequence>
                 <ReactiveFallback>
-                    <movebase goal="-1;-1;1"/>
-                    <!-- <Action ID="partrol">
-                    <ReactiveSequence>
-                        <cheakTime>
-                        <movebase goal="0;0;0"/>
-                        <Action ID="partrol">
-                    </ReactiveSequence> -->
+                     <checkBlood checkblood="400"/>
+                     <ReactiveSequence>
+                        <checkTime checktime="240"/>
+                        <movebase goal="2;1;0"/>
+                        <!-- <Action ID="partrol"> -->
+                    </ReactiveSequence>
+                    <movebase goal="2;2;0"/>
                 </ReactiveFallback> 
 
-                <!-- <Sequence>
-                    <movebase goal="4;-4;1"/>
-                    <Action ID="partrol">
-                </Sequence> -->
+                <ReactiveSequence>
+                    <!-- <ReactiveFallback> -->
+                    <!-- 判断是否被击打 -->
+                    <!-- 原地小陀螺 -->
+                    <!-- </ReactiveFallback> -->
+                    <Sequence>
+                        <movebase goal="-1;-1;0"/>
+                        <!-- <Action ID="partrol"> -->
+                    </Sequence>
+                    
+                </ReactiveSequence>
             </ReactiveSequence>
         </Sequence>
      </BehaviorTree>
