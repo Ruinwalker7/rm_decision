@@ -15,7 +15,6 @@ void configure_cb(const serial::SerialConfig &config, uint32_t level) {
 int main(int argc, char** argv) {
   // create ros2 node
 
-
   ros::init(argc, argv, "serial");
   ros::NodeHandle _nh;
   config_srv config_server_;
@@ -33,7 +32,7 @@ int main(int argc, char** argv) {
     msg.mode=mode;
     msg.header.stamp=ros::Time::now();
     msg.time = 420;
-
+    ros::Rate freqency(ros::Duration(1/100.0));
     while (ros::ok()) {
       ros::spinOnce();
       msg.blood=brood;
@@ -41,7 +40,7 @@ int main(int argc, char** argv) {
       msg.header.stamp=ros::Time::now();
       serial_pub.publish(msg);
       ros::spinOnce();
-      sleep(1);
+      freqency.sleep();
     };
 
   return 0;
