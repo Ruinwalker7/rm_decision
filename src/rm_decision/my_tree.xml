@@ -9,12 +9,15 @@
 
                      <ReactiveSequence>
                         <checkTime checktime="240"/>
-                        <movebase goal="2;1;1"/>
-                        <patrol goal="2;1;1;0"/>
-                        <patrol goal="2;1;-1;0"/>
+                        <Sequence>
+                            <movebase goal="2;1;1"/>
+                            
+                        </Sequence>
+                        <KeepRunningUntilFailure>
+                            <patrol goal="2;1;1;0"/>
+                        </KeepRunningUntilFailure>
                     </ReactiveSequence>
-
-                    <movebase goal="4;2.5;1"/>
+                    <movebase goal="3.5;2.5;1"/>
                 </ReactiveFallback> 
 
                 <ReactiveSequence>
