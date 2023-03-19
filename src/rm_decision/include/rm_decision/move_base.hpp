@@ -49,14 +49,10 @@ class MoveBaseAction : public BT::StatefulActionNode
         return{ BT::InputPort<Pose2D>("goal") };
     }
 
-    // this function is invoked once at the beginning.
     BT::NodeStatus onStart() override;
 
-    // If onStart() returned RUNNING, we will keep calling
-    // this method until it return something different from RUNNING
     BT::NodeStatus onRunning() override;
 
-    // callback to execute if the action was aborted by another node
     void onHalted() override;
 
   private:
@@ -77,7 +73,7 @@ BT::NodeStatus MoveBaseAction::onStart()
     {
     throw BT::RuntimeError("missing required input [goal]");
     }
-    printf("[ MoveBase: SEND GOAL ]. goal: x=%.1f y=%.1f \n",
+    printf("[ MoveBase: SEND GOAL ]. goal: x=%.1f y=%.1f \n\n",
          _goal.x, _goal.y);
 
     goal.target_pose.header.frame_id = "map";
@@ -110,6 +106,6 @@ BT::NodeStatus MoveBaseAction::onRunning()
 void MoveBaseAction::onHalted()
 {
     ac->cancelGoal();
-    printf("[ MoveBase: ABORTED ]");
+    printf("[ MoveBase: ABORTED ]\n\n");
 };
 #endif   // MOVEBASE_BT_NODES_H

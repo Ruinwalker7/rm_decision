@@ -2,23 +2,33 @@
      <BehaviorTree ID="MainTree">
         <Sequence name="root">
             <checkMode checkmode="1"/>
+            <Script code="status:=1" />
 
             <ReactiveSequence>
                 <ReactiveFallback>
                      <checkBlood checkblood="400"/>
+                     <Script code="status:=2" />
 
                      <ReactiveSequence>
                         <checkTime checktime="240"/>
-                        <Sequence>
+                        <Precondition if="status!=3" else="FAILURE">
                             <movebase goal="2;1;1"/>
-                            
-                        </Sequence>
-                        <KeepRunningUntilFailure>
-                            <patrol goal="2;1;1;0"/>
-                        </KeepRunningUntilFailure>
+                            <Script code="status:=3" />
+                        <Precondition/>
+
+                        <Fallback>
+                            <Inverter>
+                                <Action ID="attracked"/>
+                            </Inverter>
+                            <Action ID="spinAction"/>
+                        </Fallback>
+
+                        <patrol goal="2;1;1;0"/>
                     </ReactiveSequence>
+
                     <movebase goal="3.5;2.5;1"/>
                 </ReactiveFallback> 
+
 
                 <ReactiveSequence>
                     <!-- <ReactiveFallback> -->
@@ -30,11 +40,11 @@
                         <KeepRunningUntilFailure>
                             <patrol goal="-1.3;-2;1;0"/>
                         </KeepRunningUntilFailure>
-                        <!-- <patrol goal="-1;-1;-1;0"/> -->
                     </Sequence>
                     
                 </ReactiveSequence>
             </ReactiveSequence>
+
         </Sequence>
      </BehaviorTree>
  </root>
