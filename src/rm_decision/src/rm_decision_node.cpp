@@ -9,6 +9,9 @@ namespace Decision {
 void DecisionNode::callback(
     const rm_interfaces::SerialReceiveMsgConstPtr &msg) {
   mode_now = msg->mode;
+  if (msg->blood < blood) {
+    completion_time = chr::system_clock::now() + chr::milliseconds(5000);
+  }
   blood = msg->blood;
   time = msg->time;
 }

@@ -7,10 +7,12 @@
 #include <ros/ros.h>
 
 namespace chr = std::chrono;
-typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>
+    MoveBaseClient;
+
 MoveBaseClient *ac = nullptr;
 struct PatrolRange {
-        double x, y, x_, y_;
+  double x, y, x_, y_;
 };
 
 namespace BT {
@@ -28,7 +30,6 @@ template <> inline PatrolRange convertFromString(StringView key) {
   }
 }
 } // end namespace BT
-
 
 class PatrolAction : public BT::StatefulActionNode {
 public:
@@ -67,6 +68,7 @@ void PatrolAction::patrol() {
 }
 
 BT::NodeStatus PatrolAction::onStart() {
+  ros::spinOnce();
   if (ac == nullptr)
     ac = new MoveBaseClient("move_base", true);
   if (ac->getState() == actionlib::SimpleClientGoalState::ACTIVE)
@@ -81,8 +83,6 @@ BT::NodeStatus PatrolAction::onStart() {
   }
 
   patrol();
-  ros::spinOnce();
-  
   return BT::NodeStatus::RUNNING;
 }
 
@@ -91,7 +91,6 @@ BT::NodeStatus PatrolAction::onRunning() {
   sleep(1);
   if (ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
     patrol();
-    ros::spinOnce();
     return BT::NodeStatus::SUCCESS;
   } else if (ac->getState() == actionlib::SimpleClientGoalState::ABORTED)
     return BT::NodeStatus::FAILURE;
@@ -101,6 +100,7 @@ BT::NodeStatus PatrolAction::onRunning() {
 };
 
 void PatrolAction::onHalted() {
+  ros::spinOnce();
   ac->cancelGoal();
   printf("[ MoveBase: ABORTED ]");
 };

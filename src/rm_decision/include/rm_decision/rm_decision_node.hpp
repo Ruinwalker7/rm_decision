@@ -8,8 +8,6 @@
 
 namespace chr = std::chrono;
 static chr::system_clock::time_point completion_time = chr::system_clock::now();
-typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
-
 
 namespace Decision {
 
@@ -121,8 +119,11 @@ public:
       : StatefulActionNode(name, config) {}
 
   BT::NodeStatus onStart() {
+    if (chr::system_clock::now() > completion_time){
+      std::cout<<"No attacked\n\n";
+      return BT::NodeStatus::SUCCESS;
+    }
     std::cout << "[ Spin: START ]" << std::endl;
-    completion_time = chr::system_clock::now() + chr::milliseconds(5000);
     return BT::NodeStatus::RUNNING;
   }
 
@@ -143,10 +144,7 @@ public:
   void onHalted() { std::cout << "[ Spin: STOP ]" << std::endl; }
 
 private:
-
 };
-
-
 
 class DecisionNode {
 public:
