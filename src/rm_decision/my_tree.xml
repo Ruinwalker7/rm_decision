@@ -2,19 +2,17 @@
      <BehaviorTree ID="MainTree">
         <Sequence name="root">
             <checkMode checkmode="1"/>
-            <Script code="status:=1" />
+            <Script code="status:=0" />
 
             <ReactiveSequence>
                 <ReactiveFallback>
                      <checkBlood checkblood="400"/>
-                     <Script code="status:=2" />
 
                      <ReactiveSequence>
                         <checkTime checktime="240"/>
-                        <Precondition if="status!=3" else="FAILURE">
-                            <movebase goal="2;1;1"/>
-                            <Script code="status:=3" />
-                        <Precondition/>
+
+                        <movebase goal="2;1;1" _skipIf="status==3" />
+                        <Script code="status:=3" />
 
                         <Fallback>
                             <Inverter>
@@ -31,16 +29,22 @@
 
 
                 <ReactiveSequence>
-                    <!-- <ReactiveFallback> -->
+                    <ReactiveFallback> 
                     <!-- 判断是否被击打 -->
+                            <Inverter>
+                                <Action ID="attracked"/>
+                            </Inverter>
+                            <Action ID="spinAction"/>
                     <!-- 原地小陀螺 -->
-                    <!-- </ReactiveFallback> -->
-                    <Sequence>
-                        <movebase goal="-1.5;-2;1"/>
-                        <KeepRunningUntilFailure>
-                            <patrol goal="-1.3;-2;1;0"/>
-                        </KeepRunningUntilFailure>
-                    </Sequence>
+                    </ReactiveFallback>
+
+                    <movebase goal="-1.5;-2;1" _skipIf="status==1" _onSuccess="status:=1"/>
+
+                    <KeepRunningUntilFailure>
+                        <patrol goal="-1.3;-2;1;0"/>
+                    </KeepRunningUntilFailure>
+
+
                     
                 </ReactiveSequence>
             </ReactiveSequence>

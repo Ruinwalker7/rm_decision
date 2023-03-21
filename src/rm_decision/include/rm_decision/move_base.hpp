@@ -94,11 +94,11 @@ BT::NodeStatus MoveBaseAction::onRunning()
     {
     std::cout << "[ MoveBase: FINISHED ]" << std::endl<<std::endl;
     return BT::NodeStatus::SUCCESS;
-  }
+    }
     else if(ac->getState() == actionlib::SimpleClientGoalState::ABORTED)
         return BT::NodeStatus::FAILURE;
 
-    sleep(1);
+    std::this_thread::sleep_for(chr::milliseconds(100));
     std::cout<<"GOAL RUNNING"<<std::endl<<std::endl;
     return BT::NodeStatus::RUNNING;
 };

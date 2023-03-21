@@ -6,6 +6,7 @@
 #include <move_base_msgs/MoveBaseAction.h>         // 引用move_base的信息
 #include <ros/ros.h>
 
+namespace chr = std::chrono;
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 MoveBaseClient *ac = nullptr;
 struct PatrolRange {
@@ -28,6 +29,7 @@ template <> inline PatrolRange convertFromString(StringView key) {
 }
 } // end namespace BT
 
+
 class PatrolAction : public BT::StatefulActionNode {
 public:
   // Any TreeNode with ports must have a constructor with this signature
@@ -38,14 +40,10 @@ public:
     return {BT::InputPort<PatrolRange>("goal")};
   }
 
-  // this function is invoked once at the beginning.
   BT::NodeStatus onStart() override;
 
-  // If onStart() returned RUNNING, we will keep calling
-  // this method until it return something different from RUNNING
   BT::NodeStatus onRunning() override;
 
-  // callback to execute if the action was aborted by another node
   void onHalted() override;
 
   void patrol();
@@ -84,6 +82,7 @@ BT::NodeStatus PatrolAction::onStart() {
 
   patrol();
   ros::spinOnce();
+  
   return BT::NodeStatus::RUNNING;
 }
 
@@ -96,7 +95,7 @@ BT::NodeStatus PatrolAction::onRunning() {
     return BT::NodeStatus::SUCCESS;
   } else if (ac->getState() == actionlib::SimpleClientGoalState::ABORTED)
     return BT::NodeStatus::FAILURE;
-
+  std::this_thread::sleep_for(chr::milliseconds(200));
   std::cout << "GOAL RUNNING" << std::endl << std::endl;
   return BT::NodeStatus::RUNNING;
 };

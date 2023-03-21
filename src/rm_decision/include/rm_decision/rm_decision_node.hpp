@@ -5,8 +5,11 @@
 #include "rm_interfaces/SerialReceiveMsg.h"
 #include <ros/ros.h>
 #include <std_msgs/Int32.h>
+
 namespace chr = std::chrono;
 static chr::system_clock::time_point completion_time = chr::system_clock::now();
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
+
 
 namespace Decision {
 
@@ -118,8 +121,7 @@ public:
       : StatefulActionNode(name, config) {}
 
   BT::NodeStatus onStart() {
-
-    std::cout << "开始小陀螺" << std::endl;
+    std::cout << "[ Spin: START ]" << std::endl;
     completion_time = chr::system_clock::now() + chr::milliseconds(5000);
     return BT::NodeStatus::RUNNING;
   }
@@ -138,10 +140,13 @@ public:
     return BT::NodeStatus::RUNNING;
   }
 
-  void onHalted() { std::cout << "stop spin" << std::endl; }
+  void onHalted() { std::cout << "[ Spin: STOP ]" << std::endl; }
 
 private:
+
 };
+
+
 
 class DecisionNode {
 public:
