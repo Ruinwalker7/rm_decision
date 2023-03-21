@@ -11,27 +11,31 @@
                      <ReactiveSequence>
                         <checkTime checktime="240"/>
 
-                        <movebase goal="2;1;1" _skipIf="status==3" />
-                        <Script code="status:=3" />
+                        <movebase goal="2;1;1" _skipIf="status==3" _onSuccess="status:=3" />
 
-                        <Fallback>
-                            <Inverter>
-                                <Action ID="attracked"/>
-                            </Inverter>
-                            <Action ID="spinAction"/>
-                        </Fallback>
+                        <spinAction name="spin" _onRunning="spin:=1" _onSuccess="spin:=0"/>
 
+                        <KeepRunningUntilFailure>
                         <patrol goal="2;1;1;0"/>
-                    </ReactiveSequence>
+                        </KeepRunningUntilFailure>
 
-                    <movebase goal="3.5;2.5;1"/>
+                    </ReactiveSequence>
+                    
+                    <ForceFailure>
+                    <movebase goal="3.5;2.5;1"  _skipIf="status==4" _onSuccess="status:=4"/>
+                    </ForceFailure>
+                    <ForceFailure>
+                    <spinAction name="spin" _onRunning="spin:=1" _onSuccess="spin:=0"/>
+                    </ForceFailure>
+                    <checkBlood checkblood="400"/>
                 </ReactiveFallback> 
 
 
                 <Sequence>
                     <spinAction name="spin" _onRunning="spin:=1" _onSuccess="spin:=0"/>
-                    <movebase goal="-1.5;-2;1" _skipIf="status==1" _onSuccess="status:=1"/>
                 </Sequence>
+                    <movebase goal="-1.5;-2;1" _skipIf="status==1" _onSuccess="status:=1"/>
+
 
                 <KeepRunningUntilFailure>
                     <patrol goal="-1.3;-2;1;0"/>

@@ -95,13 +95,13 @@ BT::NodeStatus PatrolAction::onRunning() {
   } else if (ac->getState() == actionlib::SimpleClientGoalState::ABORTED)
     return BT::NodeStatus::FAILURE;
   std::this_thread::sleep_for(chr::milliseconds(200));
-  std::cout << "GOAL RUNNING" << std::endl << std::endl;
+  std::cout << "Patrol RUNNING" << std::endl << std::endl;
   return BT::NodeStatus::RUNNING;
 };
 
 void PatrolAction::onHalted() {
   ros::spinOnce();
   ac->cancelGoal();
-  printf("[ MoveBase: ABORTED ]");
+  printf("[ Patrol: ABORTED ]\n");
 };
 #endif // PATROL_HPP
