@@ -10,13 +10,13 @@ void DoShutdown(int sig)
 }
 
 int main(int argc, char** argv) {
-  // create ros2 node
   ros::init(argc, argv, "robot_base");
   Decision::DecisionNode node;
   
   signal(SIGINT, DoShutdown);
   while (ros::ok()) {
     node.tree.tickWhileRunning();
+    ROS_INFO("11");
     ros::spinOnce();
     sleep(1);
   };

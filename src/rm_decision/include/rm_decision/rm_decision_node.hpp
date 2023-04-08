@@ -15,6 +15,10 @@ namespace Decision {
 static int mode_now = 0;
 static int time = 500;
 static int blood = 600;
+static int outpose_HP = 1000;
+static std_msgs::Int32 isspin; //0不小陀螺
+static ros::Publisher pub_isspin;
+
 
 //检测是否到想要的模式（开始、结束）
 class checkMode : public BT::SyncActionNode {
@@ -25,6 +29,7 @@ public:
   static BT::PortsList providedPorts() {
     return {BT::InputPort<int>("checkmode")};
   }
+
   BT::NodeStatus tick() override {
     auto res = getInput<int>("checkmode");
     int mode = res.value();
@@ -33,15 +38,14 @@ public:
     if (mode_now == mode) {
       return BT::NodeStatus::SUCCESS;
     }
-
     return BT::NodeStatus::FAILURE;
   };
 };
 
 //检测是否小于想要的时间
-class checkTime : public BT::SyncActionNode {
+class IsBelowTime : public BT::SyncActionNode {
 public:
-  checkTime(const std::string &name, const BT::NodeConfig &config)
+  IsBelowTime(const std::string &name, const BT::NodeConfig &config)
       : SyncActionNode(name, config) {}
 
   static BT::PortsList providedPorts() {
@@ -61,10 +65,11 @@ public:
   };
 };
 
+
 //检测是否大于想要的血量
-class checkBlood : public BT::SyncActionNode {
+class IsAboveBlood : public BT::SyncActionNode {
 public:
-  checkBlood(const std::string &name, const BT::NodeConfig &config)
+  IsAboveBlood(const std::string &name, const BT::NodeConfig &config)
       : SyncActionNode(name, config) {}
 
   static BT::PortsList providedPorts() {
@@ -80,7 +85,6 @@ public:
     if (blood > checkblood) {
       return BT::NodeStatus::SUCCESS;
     }
-
     return BT::NodeStatus::FAILURE;
   };
 };
@@ -123,6 +127,8 @@ public:
       std::cout<<"No attacked\n\n";
       return BT::NodeStatus::SUCCESS;
     }
+    isspin.data = 1;
+    pub_isspin.publish(isspin);
     std::cout << "[ Spin: START ]" << std::endl;
     return BT::NodeStatus::RUNNING;
   }
@@ -135,16 +141,22 @@ public:
     std::this_thread::sleep_for(chr::milliseconds(100));
     if (chr::system_clock::now() >= completion_time) {
       std::cout << "[ Spin: FINISHED ]" << std::endl;
+      isspin.data = 0;
+      pub_isspin.publish(isspin);
       return BT::NodeStatus::SUCCESS;
     }
+    isspin.data = 1;
+    pub_isspin.publish(isspin);
     std::cout << "[ Spin: RUNNING ]" << std::endl;
     return BT::NodeStatus::RUNNING;
   }
-
-  void onHalted() { std::cout << "[ Spin: STOP ]" << std::endl; }
-
-private:
+  void onHalted() {
+    std::cout << "[ Spin: STOP ]" << std::endl;
+    isspin.data = 0;
+    pub_isspin.publish(isspin);
+  }
 };
+
 
 class DecisionNode {
 public:
