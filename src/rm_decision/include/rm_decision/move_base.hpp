@@ -4,24 +4,26 @@
 #include "behaviortree_cpp/behavior_tree.h"
 #include <actionlib/client/simple_action_client.h> // 引用actionlib库
 #include <move_base_msgs/MoveBaseAction.h>         // 引用move_base的信息
+#include "rm_decision_node.hpp"
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>
     MoveBaseClient;
 
 struct Pose2D {
-  double x, y, theta;
+  double x, y, theta,status;
 };
 
 namespace BT {
 template <> inline Pose2D convertFromString(StringView key) {
   auto parts = BT::splitString(key, ';');
-  if (parts.size() != 3) {
+  if (parts.size() != 4) {
     throw BT::RuntimeError("invalid input)");
   } else {
     Pose2D output;
     output.x = convertFromString<double>(parts[0]);
     output.y = convertFromString<double>(parts[1]);
     output.theta = convertFromString<double>(parts[2]);
+    output.status = convertFromString<int>(parts[3]);
     return output;
   }
 }
@@ -75,6 +77,7 @@ BT::NodeStatus MoveBaseAction::onRunning() {
   ros::spinOnce();
   if (ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
     std::cout << "[ MoveBase: FINISHED ]" << std::endl << std::endl;
+    Decision::Positionstatus=_goal.status;
     return BT::NodeStatus::SUCCESS;
   } else if (ac->getState() == actionlib::SimpleClientGoalState::ABORTED)
     return BT::NodeStatus::FAILURE;

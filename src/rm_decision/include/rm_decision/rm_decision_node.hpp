@@ -18,7 +18,7 @@ static int blood = 600;
 static int outpose_HP = 1000;
 static std_msgs::Int32 isspin; //0不小陀螺
 static ros::Publisher pub_isspin;
-
+static int Positionstatus = 0;
 
 //检测是否到想要的模式（开始、结束）
 class checkMode : public BT::SyncActionNode {
@@ -40,6 +40,49 @@ public:
     }
     return BT::NodeStatus::FAILURE;
   };
+};
+
+//判断status
+class IsStatus : public BT::SyncActionNode
+{
+public:
+  IsStatus(const std::string& name, const BT::NodeConfig& config)
+    : SyncActionNode(name, config)
+  { }
+
+  static BT::PortsList providedPorts() {
+    return {BT::InputPort<int>("status")};
+  }
+
+  BT::NodeStatus tick() override
+  {
+    auto res = getInput<int>("status");
+    int Status = res.value();
+    if(Positionstatus==Status)
+      return BT::NodeStatus::SUCCESS;
+    else
+      return BT::NodeStatus::FAILURE;
+  }
+};
+
+
+//设置status
+class SetStatus : public BT::SyncActionNode
+{
+public:
+  SetStatus(const std::string& name, const BT::NodeConfig& config)
+    : SyncActionNode(name, config)
+  { }
+
+  static BT::PortsList providedPorts() {
+    return {BT::OutputPort<int>("status")};
+  }
+
+  BT::NodeStatus tick() override
+  { setOutput("status", Positionstatus );
+      return BT::NodeStatus::SUCCESS;
+
+  }
 };
 
 //检测是否小于想要的时间
@@ -65,12 +108,41 @@ public:
   };
 };
 
+//开启小陀螺
+class Spin : public BT::SyncActionNode {
+public:
+  Spin(const std::string &name)
+      : SyncActionNode(name,{}) {}
+
+  BT::NodeStatus tick() override {
+    // ros::spinOnce();
+    isspin.data = 1;
+    pub_isspin.publish(isspin);
+    std::cout << "开启小陀螺" << std::endl;
+    return BT::NodeStatus::SUCCESS;
+  };
+};
+
+//关闭小陀螺
+class StopSpin : public BT::SyncActionNode {
+public:
+  StopSpin(const std::string &name)
+      : SyncActionNode(name,{}) {}
+
+  BT::NodeStatus tick() override {
+    ros::spinOnce();
+    isspin.data = 0;
+    pub_isspin.publish(isspin);
+    std::cout << "关闭小陀螺" << std::endl;
+    return BT::NodeStatus::SUCCESS;
+  };
+};
 
 //检测是否大于想要的血量
 class IsAboveBlood : public BT::SyncActionNode {
 public:
   IsAboveBlood(const std::string &name, const BT::NodeConfig &config)
-      : SyncActionNode(name, config) {}
+      : SyncActionNode(name,config) {}
 
   static BT::PortsList providedPorts() {
     return {BT::InputPort<int>("checkblood")};
@@ -116,7 +188,7 @@ private:
   int _blood;
 };
 
-//小陀螺
+//被攻击后小陀螺
 class SpinAction : public BT::StatefulActionNode {
 public:
   SpinAction(const std::string &name, const BT::NodeConfig &config)

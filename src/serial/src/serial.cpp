@@ -30,18 +30,18 @@ int main(int argc, char **argv) {
   msg.pitch = 0;
   msg.yaw = 0;
   msg.outpose_HP = 0;
-  msg.time = 420;
+  msg.remaining_time = 420;
   msg.blood = blood;
   msg.mode = 0;
   msg.game_status = game_status;
   msg.header.stamp = ros::Time::now();
-  msg.time = time_;
+
   ros::Rate freqency(ros::Duration(1 / 100.0));
   while (ros::ok()) {
     ros::spinOnce();
     msg.blood = blood;
     msg.game_status = game_status;
-    msg.time = time_;
+    msg.remaining_time = time_;
     msg.header.stamp = ros::Time::now();
     serial_pub.publish(msg);
     ros::spinOnce();

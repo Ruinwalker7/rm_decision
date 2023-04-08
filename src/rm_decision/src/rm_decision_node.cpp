@@ -29,10 +29,14 @@ DecisionNode::DecisionNode() : nh_() {
   factory.registerNodeType<checkMode>("checkMode");
   factory.registerNodeType<PatrolAction>("patrol");
   factory.registerNodeType<MoveBaseAction>("movebase");
-  factory.registerNodeType<IsBelowTime>("checkTime");
-  factory.registerNodeType<IsAboveBlood>("checkBlood");
+  factory.registerNodeType<IsBelowTime>("IsBelowTime");
+  factory.registerNodeType<IsAboveBlood>("IsAboveBlood");
   factory.registerNodeType<SpinAction>("spinAction");
   factory.registerNodeType<IsAttacked>("attracked");
+  factory.registerNodeType<SetStatus>("SetStatus");
+  factory.registerNodeType<IsStatus>("IsStatus");
+  factory.registerNodeType<Spin>("spin");
+  
   tree = factory.createTreeFromFile(model_path);
 
 }

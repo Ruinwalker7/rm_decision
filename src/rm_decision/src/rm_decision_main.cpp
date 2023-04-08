@@ -16,7 +16,6 @@ int main(int argc, char** argv) {
   signal(SIGINT, DoShutdown);
   while (ros::ok()) {
     node.tree.tickWhileRunning();
-    ROS_INFO("11");
     ros::spinOnce();
     sleep(1);
   };

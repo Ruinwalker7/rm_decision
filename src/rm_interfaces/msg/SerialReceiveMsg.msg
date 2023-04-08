@@ -2,7 +2,6 @@ Header header
 uint8 game_status
 uint8 mode
 float32 blood
-float32 time
 float32 remaining_time
 float32 outpose_HP
 float32 bullet_speed

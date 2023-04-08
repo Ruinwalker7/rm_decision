@@ -2,47 +2,39 @@
      <BehaviorTree ID="MainTree">
         <Sequence name="root">
             <checkMode checkmode="1"/>
-            <Script code="status:=0" />
+            <Script code="status:=0"/>
+            <SetStatus name="setStatus" status="{status}"/>
+            <ForceSuccess>
+            <IsAboveBlood checkblood="400" _onSuccess="blood:=1" _onFailure="blood:=0"/>
+            </ForceSuccess>
 
-            <ReactiveSequence>
-                <ReactiveFallback>
-                     <checkBlood checkblood="400"/>
+            <ForceSuccess>
+            <IsBelowTime checktime="240" _onSuccess="time:=1" _onFailure="time:=0"/>
+            </ForceSuccess>
 
-                     <ReactiveSequence>
-                        <checkTime checktime="240"/>
-
-                        <movebase goal="2;1;1" _skipIf="status==3" _onSuccess="status:=3" />
-
-                        <spinAction name="spin" _onRunning="spin:=1" _onSuccess="spin:=0"/>
-
-                        <KeepRunningUntilFailure>
-                        <patrol goal="2;1;1;0"/>
-                        </KeepRunningUntilFailure>
-
-                    </ReactiveSequence>
-                    
-                    <ForceFailure>
-                    <movebase goal="3.5;2.5;1"  _skipIf="status==4" _onSuccess="status:=4"/>
-                    </ForceFailure>
-                    <ForceFailure>
-                    <spinAction name="spin" _onRunning="spin:=1" _onSuccess="spin:=0"/>
-                    </ForceFailure>
-                    <checkBlood checkblood="400"/>
-                </ReactiveFallback> 
-
-
+            <Precondition if="blood==0 && time==0" else="SUCCESS">
+                <ForceFailure>
                 <Sequence>
-                    <spinAction name="spin" _onRunning="spin:=1" _onSuccess="spin:=0"/>
+                <movebase goal="2;1;1;3" _skipIf="status==3" _onSuccess="status:=3" />
+                <spin name="spin"/>
                 </Sequence>
-                    <movebase goal="-1.5;-2;1" _skipIf="status==1" _onSuccess="status:=1"/>
+                </ForceFailure>
+            </Precondition>
+
+            <Precondition if="blood==0 && time==1" else="SUCCESS">
+            <ForceFailure>
+                <Sequence>
+                <movebase goal="3.5;2.5;1;4"  _skipIf="status==4" _onSuccess="status:=4"/>
+                <spin name="spin"/>
+                </Sequence>
+                </ForceFailure>
+            </Precondition>
 
 
-                <KeepRunningUntilFailure>
-                    <patrol goal="-1.3;-2;1;0"/>
-                </KeepRunningUntilFailure> 
+            <movebase goal="-1.5;-2;1;1" _skipIf="status==1" _onSuccess="status:=1"/>
 
-            </ReactiveSequence>
 
+            
         </Sequence>
      </BehaviorTree>
  </root>
